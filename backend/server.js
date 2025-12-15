@@ -30,11 +30,25 @@ app.get("/", (req, res) => {
     res.send("Hello World!");
 })
 
-app.post("/api/transactions", async (req, res)=>{
+app.get("/api/transactions/:userId", async (req, res) => {
     try {
-        const {title, amount, category, user_id} = req.body;
-        if(!title || !user_id || !category || !amount === undefined){
-            return res.status(400).json({message : "All fields are required"});
+        const { userId } = req.params;
+        const transactions = await sql`
+        SELECT * FROM transactions WHERE user_id = ${userId} ORDER BY created_at DESC
+      `;
+        console.log("Transactions fetched successfully", transactions);
+        res.status(200).json(transactions);
+    } catch (error) {
+        console.log("Error getting the transactions", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+})
+
+app.post("/api/transactions", async (req, res) => {
+    try {
+        const { title, amount, category, user_id } = req.body;
+        if (!title || !user_id || !category || !amount === undefined) {
+            return res.status(400).json({ message: "All fields are required" });
         }
 
         const transaction = await sql`
@@ -48,7 +62,7 @@ app.post("/api/transactions", async (req, res)=>{
 
     } catch (error) {
         console.log("Error creating the transaction", error);
-        res.status(500).json({message : "Internal Server Error"});
+        res.status(500).json({ message: "Internal Server Error" });
     }
 })
 
