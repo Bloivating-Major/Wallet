@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev" : "npx nodemon server.js"
+    "dev": "npx nodemon server.js"
   },
   "type": "module",
   "keywords": [],
@@ -12,6 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.36.1",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1"
