@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   },
   illustration: {
     height: 310,
-    width: 300,
+    width: 350,
     resizeMode: "contain",
   },
   title: {

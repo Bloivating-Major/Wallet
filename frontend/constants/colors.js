@@ -63,19 +63,6 @@ const splitwiseTheme = {
   shadow: "#00000015",       
 };
 
-const splitwiseDarkTheme = {
-  primary: "#00A88E",        
-  background: "#F0F4F8",     
-  text: "#1A202C",           
-  border: "#CBD5E0",         
-  white: "#FFFFFF",          
-  textLight: "#4A5568",      
-  expense: "#E53E3E",           
-  income: "#38B2AC",         
-  card: "#FFFFFF",           
-  shadow: "#00000020",       
-};
-
 const splitwiseModernTheme = {
   primary: "#20D9BB",        
   background: "#FAFBFC",     
@@ -89,6 +76,19 @@ const splitwiseModernTheme = {
   shadow: "#00000012",       
 };
 
+const splitwiseDarkTheme = {
+  primary: "#26D0AB",        
+  background: "#121212",     
+  text: "#F3F4F6",           
+  border: "#2D3748",         
+  white: "#1E1E1E",          
+  textLight: "#9CA3AF",      
+  expense: "#FF8787",        
+  income: "#4FD1C5",         
+  card: "#1E1E1E",           
+  shadow: "#000000",         
+};
+
 
 export const THEMES = {
   coffee: coffeeTheme,
@@ -100,4 +100,4 @@ export const THEMES = {
   splitwiseModern: splitwiseModernTheme,
 };
 
-export const COLORS = THEMES.splitwise;  
+export const COLORS = THEMES.coffee;  
