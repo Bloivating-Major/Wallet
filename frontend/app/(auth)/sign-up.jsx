@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { useSignUp } from '@clerk/clerk-expo'
-import { Link, useRouter } from 'expo-router'
+import { useRouter } from 'expo-router'
 import { styles } from "@/assets/styles/auth.styles.js"
 import { Ionicons } from '@expo/vector-icons'
 import { COLORS } from '@/constants/colors.js'
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp()
@@ -12,57 +13,53 @@ export default function SignUpScreen() {
 
   const [emailAddress, setEmailAddress] = useState('')
   const [password, setPassword] = useState('')
+  const [passwordVisible, setPasswordVisible] = useState(false)
   const [pendingVerification, setPendingVerification] = useState(false)
   const [code, setCode] = useState('')
   const [error, setError] = useState('')
 
-  // Handle submission of sign-up form
   const onSignUpPress = async () => {
     if (!isLoaded) return
 
-    // Start sign-up process using email and password provided
     try {
       await signUp.create({
         emailAddress,
         password,
       })
 
-      // Send user an email with verification code
       await signUp.prepareEmailAddressVerification({ strategy: 'email_code' })
 
-      // Set 'pendingVerification' to true to display second form
-      // and capture OTP code
       setPendingVerification(true)
     } catch (err) {
-      // See Clerk docs: custom flows error handling
-      // for more info on error handling
-      console.error(JSON.stringify(err, null, 2))
+      if (err.errors?.[0]?.code === "form_identifier_exists") {
+        setError("That email address is already in use. Please try another.");
+      } else if (err.errors?.[0]?.code === "form_password_pwned") {
+        setError("That password is too weak. Please try another.");
+      }else if (err.errors?.[0]?.code === "form_password_length_too_short") {
+        setError("Passwords must be 8 characters or more.");
+      }
+       else {
+        setError("Something went wrong. Please try again.");
+      }
+      console.log(JSON.stringify(err, null, 2))
     }
   }
 
-  // Handle submission of verification form
   const onVerifyPress = async () => {
     if (!isLoaded) return
 
     try {
-      // Use the code the user provided to attempt verification
       const signUpAttempt = await signUp.attemptEmailAddressVerification({
         code,
       })
 
-      // If verification was completed, set the session to active
-      // and redirect the user
       if (signUpAttempt.status === 'complete') {
         await setActive({ session: signUpAttempt.createdSessionId })
         router.replace('/')
       } else {
-        // If the status is not complete, check why. User may need to
-        // complete further steps.
         console.error(JSON.stringify(signUpAttempt, null, 2))
       }
     } catch (err) {
-      // See Clerk docs: custom flows error handling
-      // for more info on error handling
       console.error(JSON.stringify(err, null, 2))
     }
   }
@@ -94,7 +91,13 @@ export default function SignUpScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ flexGrow: 1 }}
+      enableOnAndroid={true}
+      enableAutomaticScroll={true}
+    >
+      <View style={styles.container}>
         <Image source={require("../../assets/images/illustration03.png")} style={styles.illustration} />
         <Text style={styles.title}>Create Account</Text>
         {error ? (
@@ -115,14 +118,28 @@ export default function SignUpScreen() {
           onChangeText={(email) => setEmailAddress(email)}
         />
 
-        <TextInput
-          style={[styles.input, error && styles.errorInput]}
-          value={password}
-          placeholder="Enter password"
-          placeholderTextColor="#9A8478"
-          secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
-        />
+        <View style={styles.inputWrapper}>
+          <TextInput
+            style={[styles.input, error && styles.errorInput]}
+            value={password}
+            placeholder="Enter password"
+            placeholderTextColor="#9A8478"
+            secureTextEntry={!passwordVisible}
+            onChangeText={setPassword}
+          />
+
+          <TouchableOpacity
+            style={styles.eyeIcon}
+            onPress={() => setPasswordVisible(!passwordVisible)}
+          >
+            <Ionicons
+              name={passwordVisible ? "eye" : "eye-off"}
+              size={20}
+              color="black"
+            />
+          </TouchableOpacity>
+        </View>
+
 
         <TouchableOpacity style={styles.button} onPress={onSignUpPress}>
           <Text style={styles.buttonText}>Sign Up</Text>
@@ -134,6 +151,7 @@ export default function SignUpScreen() {
             <Text style={styles.linkText}>Sign in</Text>
           </TouchableOpacity>
         </View>
-    </View>
+      </View>
+    </KeyboardAwareScrollView>
   )
 }

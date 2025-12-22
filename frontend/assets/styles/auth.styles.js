@@ -30,6 +30,15 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     color: COLORS.text,
   },
+  inputWrapper: {
+    position: "relative",
+  },
+  eyeIcon: {
+    position: "absolute",
+    right: 16,
+    top: "50%",
+    transform: [{ translateY: -18 }],
+  },
   errorInput: {
     borderColor: COLORS.expense,
   },
