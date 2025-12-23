@@ -5,7 +5,7 @@
   "main": "src/server.js",
   "scripts": {
     "dev": "npx nodemon src/server.js",
-    "build" : "node src/server.js"
+    "start" : "node src/server.js"
   },
   "type": "module",
   "keywords": [],
