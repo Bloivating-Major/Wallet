@@ -57,10 +57,17 @@ export default function SignUpScreen() {
         await setActive({ session: signUpAttempt.createdSessionId })
         router.replace('/')
       } else {
-        console.error(JSON.stringify(signUpAttempt, null, 2))
+        console.log(JSON.stringify(signUpAttempt, null, 2))
       }
     } catch (err) {
-      console.error(JSON.stringify(err, null, 2))
+      console.log(JSON.stringify(err, null, 2))
+      if (err.errors?.[0]?.code === "form_code_incorrect") {
+        setError("Incorrect Code");
+      }else if(err.errors?.[0]?.code === "verification_failed"){
+               setError("Code expired. Please try again.");
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
     }
   }
 
