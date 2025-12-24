@@ -1,10 +1,10 @@
 import { useSignIn } from '@clerk/clerk-expo'
 import { Link, useRouter } from 'expo-router'
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import {useState} from 'react'
+import { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { styles } from '../../assets/styles/auth.styles';
+import { styles } from '../../assets/styles/auth.styles.js';
 import { COLORS } from '../../constants/colors.js';
 
 export default function Page() {
@@ -18,10 +18,19 @@ export default function Page() {
 
   const onSignInPress = async () => {
     if (!isLoaded) return
+    const trimmedEmail = emailAddress.trim();
+    if (!trimmedEmail) {
+      setError("Please enter your email address.");
+      return;
+    }
+    if (!password) {
+      setError("Please enter your password.");
+      return;
+    }
 
     try {
       const signInAttempt = await signIn.create({
-        identifier: emailAddress,
+        identifier: trimmedEmail,
         password,
       })
 
@@ -34,6 +43,8 @@ export default function Page() {
     } catch (err) {
       if (err.errors?.[0]?.code === "form_password_incorrect") {
         setError("Password is incorrect. Please try again.");
+      } else if (err.errors?.[0]?.code === "form_param_format_invalid") {
+        setError("Please enter a valid email address.");
       } else {
         setError("An error occurred. Please try again.");
       }
@@ -79,7 +90,7 @@ export default function Page() {
             placeholder="Enter password"
             placeholderTextColor="#9A8478"
             secureTextEntry={!passwordVisible}
-            onChangeText={setPassword}
+            onChangeText={(password) => setPassword(password)}
           />
 
           <TouchableOpacity
