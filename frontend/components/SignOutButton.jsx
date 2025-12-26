@@ -1,6 +1,6 @@
 import { useClerk } from '@clerk/clerk-expo'
 import * as Linking from 'expo-linking'
-import { TouchableOpacity } from 'react-native'
+import { Alert, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { styles } from '../assets/styles/home.styles.js'
 import { COLORS } from '../constants/colors.js'

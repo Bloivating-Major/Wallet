@@ -7,6 +7,7 @@ import { useEffect } from 'react'
 import PageLoader from '../../components/PageLoader'
 import { styles } from '../../assets/styles/home.styles'
 import { Ionicons } from '@expo/vector-icons'
+import { BalanceCard } from '../../components/BalanceCard'
 
 export default function Page() {
   const { user } = useUser()
@@ -32,7 +33,7 @@ export default function Page() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
+
       <View style={styles.content}>
         {/* Header */}
         <View style={styles.header}>
@@ -66,7 +67,8 @@ export default function Page() {
           </View>
       
         </View>
-      
+       
+        <BalanceCard summary={summary} />
       </View>
 
       {/* Content */}
