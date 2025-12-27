@@ -2,6 +2,7 @@ import SafeScreen from "@/components/SafeScreen.jsx"
 import { ClerkProvider } from "@clerk/clerk-expo";
 import { Slot } from "expo-router";
 import * as SecureStore from "expo-secure-store";
+import { StatusBar } from "expo-status-bar";
 
 const tokenCache = {
   async getToken(key) {
@@ -34,6 +35,7 @@ export default function RootLayout() {
       <SafeScreen>
         <Slot />
       </SafeScreen>
+      <StatusBar style="dark" />
     </ClerkProvider>
   )
 }
