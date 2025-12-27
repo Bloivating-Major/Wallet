@@ -13,7 +13,9 @@ export const useTransactions = (userId) => {
 
     const fetchTransactions = useCallback(async () => {
         try {
-            const response = await fetch(`${API_URL}/transactions/${userId}`)
+            const response = await fetch(`${API_URL}/transactions/${userId}`, {
+                headers: { "x-clerk-user-id": userId }
+            })
             const data = await response.json()
             setTransactions(data)
         } catch (error) {
@@ -23,7 +25,9 @@ export const useTransactions = (userId) => {
 
     const fetchSummary = useCallback(async () => {
         try {
-            const response = await fetch(`${API_URL}/transactions/summary/${userId}`)
+            const response = await fetch(`${API_URL}/transactions/summary/${userId}`, {
+                headers: { "x-clerk-user-id": userId }
+            })
             const data = await response.json()
             setSummary(data)
         } catch (error) {
@@ -46,7 +50,10 @@ export const useTransactions = (userId) => {
 
     const deleteTransaction = async (id) => {
         try {
-            const response = await fetch(`${API_URL}/transactions/${id}`, { method: "DELETE" });
+            const response = await fetch(`${API_URL}/transactions/${id}`, {
+                method: "DELETE",
+                headers: { "x-clerk-user-id": userId }
+            });
             if (!response.ok) throw new Error("Failed to delete transaction");
             loadData();
             Alert.alert("Success", "Transaction deleted successfully");

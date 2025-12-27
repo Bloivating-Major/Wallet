@@ -10,10 +10,10 @@ dotenv.config();
 
 const app = express();
 
-if(process.env.NODE_ENV === "production") job.start();
+if (process.env.NODE_ENV === "production") job.start();
 
-app.use(rateLimiter);
 app.use(express.json());
+app.use(rateLimiter);
 
 const PORT = process.env.PORT || 5001;
 

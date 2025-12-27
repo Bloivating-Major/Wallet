@@ -48,6 +48,7 @@ const CreateScreen = () => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "x-clerk-user-id": user.id,
                 },
                 body: JSON.stringify({
                     user_id: user.id,
